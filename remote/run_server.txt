@@ -1,0 +1,3 @@
+:: change the extension to .bat
+@echo off
+call ant -buildfile build_remote.xml

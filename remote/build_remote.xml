@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Example Ant Build with JaCoCo" default="rebuild"	xmlns:jacoco="antlib:org.jacoco.ant">
+
+    <!-- By default internal package is used -->
+    <property name="src.dir" location="./../src/internal" />
+	<property name="result.dir" location="./target" />
+	<property name="result.classes.dir" location="${result.dir}/classes" />
+	<property name="result.dump.dir" location="${result.dir}/dumpDir" />
+	<property name="result.exec.file" location="${result.dir}/jacoco.exec" />
+
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="./../lib/jacocoant.jar" />
+	</taskdef>
+
+	<target name="clean">
+		<delete dir="${result.dir}" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${result.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${result.classes.dir}" debug="true" includeantruntime="false"/>
+	</target>
+
+	<target name="test" depends="compile">
+		<jacoco:coverage destfile="${result.exec.file}"	output="tcpserver" address="localhost" port="6300" classdumpdir="${result.dump.dir}" >
+		    <!-- By default internal package is used -->
+		    <java classname="internal.br.ufpe.cin.example.MainWindow" fork="true">
+				<classpath path="${result.classes.dir}" />
+			</java>
+		</jacoco:coverage>
+	</target>
+	
+	<target name="finish" depends="test">
+		<delete dir="${result.dir}" />
+		<delete dir="./output" />
+	</target>
+
+	<target name="rebuild" depends="clean,compile,test,finish" />
+
+</project>

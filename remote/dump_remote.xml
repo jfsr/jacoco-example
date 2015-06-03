@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Example Ant Build with JaCoCo" default="rebuild"	xmlns:jacoco="antlib:org.jacoco.ant">
+
+	<property name="src.dir" location="./../src" />
+	<property name="result.classes.dir" location="./target/dumpDir" />
+	<property name="result.dir" location="./output" />
+	<property name="result.report.dir" location="${result.dir}/coverageReport" />
+	<property name="result.exec.file" location="${result.dir}/dumpDir/jacoco.exec" />
+
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="./../lib/jacocoant.jar" />
+	</taskdef>
+
+	<target name="dump">
+		<echo>Dumping the jacoco results to ${result.exec.file}</echo>
+		<jacoco:dump address="localhost" port="6300" reset="true" append="true" destfile="${result.exec.file}" />
+	</target>
+
+	<target name="clean" depends="dump">
+		<delete dir="${result.report.dir}" />
+	</target>
+	
+	<target name="report" depends="clean">
+		<jacoco:report>
+
+			<executiondata>
+				<file file="${result.exec.file}" />
+			</executiondata>
+
+			<structure name="Partial Report">
+				<classfiles>
+					<fileset dir="${result.classes.dir}" />
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${src.dir}" />
+				</sourcefiles>
+			</structure>
+
+			<html destdir="${result.report.dir}" />
+			<csv destfile="${result.report.dir}/report.csv" />
+			<xml destfile="${result.report.dir}/report.xml" />
+		</jacoco:report>
+	</target>
+
+	<target name="rebuild" depends="dump,clean,report" />
+
+</project>

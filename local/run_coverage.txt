@@ -1,0 +1,4 @@
+:: change the extension to .bat
+@echo off
+call ant -buildfile build_local.xml
+start target/site/jacoco/index.html

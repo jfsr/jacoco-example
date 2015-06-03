@@ -1,0 +1,4 @@
+:: change the extension to .bat
+@echo off
+call ant -buildfile dump_remote.xml
+start output/coverageReport/index.html
