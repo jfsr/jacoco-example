@@ -51,7 +51,6 @@ public class MainWindow extends JFrame{
 		add(e3);
 		
 		this.setSize(250,80);
-		this.setVisible(true);
 	}
 	
 	public void setSize(int width, int height){  
@@ -128,7 +127,6 @@ public class MainWindow extends JFrame{
 	}
 
 	public static void main(String[] args) {
-		new MainWindow();
+		new MainWindow().setVisible(true);
 	}
-
 }
